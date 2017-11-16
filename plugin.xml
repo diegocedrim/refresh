@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="refreshBuilder"
+         name="Refresh Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="br.pucrio.opus.refresh.builder.RefreshBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="refreshNature"
+         name="Refresh Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="br.pucrio.opus.refresh.builder.RefreshNature">
+         </run>
+      </runtime>
+      <builder
+            id="br.pucrio.opus.refresh.refreshBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="br.pucrio.opus.refresh.refreshNature.category"
+            name="Refresh Project Nature commands">
+      </category>
+      <command
+            categoryId="br.pucrio.opus.refresh.refreshNature.category"
+            defaultHandler="br.pucrio.opus.refresh.builder.AddRemoveRefreshNatureHandler"
+            id="br.pucrio.opus.refresh.addRemoveRefreshNature"
+            name="Add/RemoveRefresh Project Nature">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <command
+               commandId="br.pucrio.opus.refresh.addRemoveRefreshNature"
+               label="Disable Refresh"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="br.pucrio.opus.refresh.refreshNature">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="br.pucrio.opus.refresh.addRemoveRefreshNature"
+               label="Enable Refresh"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="br.pucrio.opus.refresh.refreshNature">
+                           </test>
+                        </not>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+
+
+</plugin>
