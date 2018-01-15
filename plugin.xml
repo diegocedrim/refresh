@@ -93,17 +93,6 @@
       </menuContribution>
    </extension>
    <extension
-         id="xmlProblem"
-         name="XML Problem"
-         point="org.eclipse.core.resources.markers">
-      <super
-            type="org.eclipse.core.resources.problemmarker">
-      </super>
-      <persistent
-            value="true">
-      </persistent>
-   </extension>
-   <extension
          point="org.eclipse.ui.views">
       <category
             id="br.pucrio.opus.refresh"
@@ -111,19 +100,11 @@
       </category>
       <view
             category="br.pucrio.opus.refresh"
-            class="br.pucrio.opus.refresh.views.MetricsView"
+            class="br.pucrio.opus.refresh.views.SmellsTreeView"
             icon="icons/sample.png"
-            id="br.pucrio.opus.refresh.views.MetricsView"
+            id="br.pucrio.opus.refresh.views.SmellsTreeView"
             inject="true"
-            name="Metrics View">
-      </view>
-      <view
-            category="br.pucrio.opus.refresh"
-            class="br.pucrio.opus.refresh.views.MetricsTreeView"
-            icon="icons/sample.png"
-            id="br.pucrio.opus.refresh.views.MetricsTreeView"
-            inject="true"
-            name="Sample View">
+            name="Smells Tree View">
       </view>
    </extension>
    <extension
@@ -131,30 +112,12 @@
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
          <view
-               id="br.pucrio.opus.refresh.views.MetricsView"
+               id="br.pucrio.opus.refresh.views.SmellsTreeView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.ProblemView">
          </view>
       </perspectiveExtension>
-      <perspectiveExtension
-            targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view
-               id="br.pucrio.opus.refresh.views.MetricsTreeView"
-               ratio="0.5"
-               relationship="right"
-               relative="org.eclipse.ui.views.ProblemView">
-         </view>
-      </perspectiveExtension>
-   </extension>
-   <extension
-         point="org.eclipse.help.contexts">
-      <contexts
-            file="contexts.xml">
-      </contexts>
-      <contexts
-            file="contexts.xml">
-      </contexts>
    </extension>
 
 

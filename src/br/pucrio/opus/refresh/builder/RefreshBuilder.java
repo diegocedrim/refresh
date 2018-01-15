@@ -58,7 +58,7 @@ public class RefreshBuilder extends IncrementalProjectBuilder {
 
 
 	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
-		SmellDetectorJob job = new SmellDetectorJob("detector", getJavaProject());
+		SmellDetectorJob job = new SmellDetectorJob("Code smells detection", getJavaProject());
 		job.schedule();
 	}
 

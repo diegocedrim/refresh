@@ -96,6 +96,16 @@ public class Type extends Resource {
 		this.setKind(buffer.toString());
 	}
 	
+	public boolean isClass() {
+		TypeDeclaration typeDeclaration = (TypeDeclaration)getNode();
+		return !typeDeclaration.isInterface();
+	}
+	
+	public boolean isInterface() {
+		TypeDeclaration typeDeclaration = (TypeDeclaration)getNode();
+		return typeDeclaration.isInterface();
+	}
+	
 	public Type(SourceFile sourceFile, TypeDeclaration typeDeclaration) {
 		super(sourceFile, typeDeclaration);
 		this.children = new HashSet<>();

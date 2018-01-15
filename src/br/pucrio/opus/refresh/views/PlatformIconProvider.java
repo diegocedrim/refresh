@@ -36,4 +36,28 @@ public class PlatformIconProvider {
 	public static Image sourceFolder() {
 		return fromRelativeUrl("obj16/packagefolder_obj.png");
 	}
+	
+	public static Image classIcon() {
+		return fromRelativeUrl("elcl16/class_obj.png");
+	}
+	
+	public static Image enumIcon() {
+		return fromRelativeUrl("obj16/enum_obj.png");
+	}
+	
+	public static Image interfaceIcon() {
+		return fromRelativeUrl("obj16/innerinterface_public_obj.png");
+	}
+	
+	public static Image publicMethod() {
+		return fromRelativeUrl("obj16/methpub_obj.png");
+	}
+	
+	public static Image privateMethod() {
+		return fromRelativeUrl("obj16/methpri_obj.png");
+	}
+	
+	public static Image protectedMethod() {
+		return fromRelativeUrl("obj16/methpro_obj.png");
+	}
 }
