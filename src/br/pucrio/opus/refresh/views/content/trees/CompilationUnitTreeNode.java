@@ -34,7 +34,7 @@ public class CompilationUnitTreeNode extends AbstractTreeNode {
 			}
 			return smelly;
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return null;
 		}
 	}

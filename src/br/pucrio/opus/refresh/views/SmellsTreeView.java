@@ -63,9 +63,9 @@ public class SmellsTreeView extends ViewPart implements IJobChangeListener {
 					try {
 						JavaUI.openInEditor(node.getJavaElement());
 					} catch (PartInitException e) {
-						new RefreshLogger().logError(e);
+						RefreshLogger.getInstance().logError(e);
 					} catch (JavaModelException e) {
-						new RefreshLogger().logError(e);
+						RefreshLogger.getInstance().logError(e);
 					}
 				}
 			}

@@ -16,7 +16,7 @@ public class PlatformIconProvider {
 			ImageDescriptor descriptor = ImageDescriptor.createFromURL(new URL(PREFIX + relativeUrl));
 			return descriptor.createImage();
 		} catch (MalformedURLException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return null;
 		}
 	}

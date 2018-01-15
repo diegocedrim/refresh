@@ -9,7 +9,17 @@ import br.pucrio.opus.refresh.Activator;
 public class RefreshLogger {
 	private ILog logger;
 	
-	public RefreshLogger() {
+	private static final RefreshLogger singleton;
+	
+	static {
+		singleton = new RefreshLogger();
+	}
+	
+	public static RefreshLogger getInstance() {
+		return singleton;
+	}
+	
+	private RefreshLogger() {
 		this.logger = Activator.getDefault().getLog();
 	}
 	

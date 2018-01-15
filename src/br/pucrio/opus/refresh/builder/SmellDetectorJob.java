@@ -51,10 +51,10 @@ public class SmellDetectorJob extends Job {
 			List<ICompilationUnit> units = getProjectCompilationUnits();
 			OrganicDetectionService.getInstance().detect(units);
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return Status.CANCEL_STATUS;
 		} catch (IOException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return Status.CANCEL_STATUS;
 		}
 		return Status.OK_STATUS;

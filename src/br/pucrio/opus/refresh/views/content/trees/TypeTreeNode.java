@@ -34,7 +34,7 @@ public class TypeTreeNode extends AbstractTreeNode {
 			}
 			return smelly;
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return null;
 		}
 	}
@@ -82,7 +82,7 @@ public class TypeTreeNode extends AbstractTreeNode {
 				return PlatformIconProvider.classIcon();
 			} 
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 		}
 		return null;
 	}

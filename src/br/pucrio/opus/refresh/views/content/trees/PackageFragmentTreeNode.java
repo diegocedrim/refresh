@@ -32,7 +32,7 @@ public class PackageFragmentTreeNode extends AbstractTreeNode {
 			}
 			return smellyUnits;
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return null;
 		}
 	}

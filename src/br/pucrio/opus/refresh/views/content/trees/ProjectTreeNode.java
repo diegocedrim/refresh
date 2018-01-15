@@ -35,7 +35,7 @@ public class ProjectTreeNode extends AbstractTreeNode {
 			}
 			return roots;
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError("Error during ProjectTreeNode creation", e);
+			RefreshLogger.getInstance().logError(e);
 			return new ArrayList<>();
 		}
 	}

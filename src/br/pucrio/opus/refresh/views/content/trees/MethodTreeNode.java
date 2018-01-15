@@ -40,7 +40,7 @@ public class MethodTreeNode extends AbstractTreeNode {
 			buffer.append(Signature.getSignatureSimpleName(method.getReturnType()));
 			return buffer.toString();
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return method.getElementName();
 		}
 	}
@@ -84,7 +84,7 @@ public class MethodTreeNode extends AbstractTreeNode {
 			} 
 			return null;
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return null;
 		}
 		

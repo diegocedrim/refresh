@@ -34,7 +34,7 @@ public class PackageRootTreeNode extends AbstractTreeNode {
 			}
 			return fragments;
 		} catch (JavaModelException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return null;
 		}
 	}

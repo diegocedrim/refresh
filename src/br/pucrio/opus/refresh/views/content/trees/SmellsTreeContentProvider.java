@@ -28,7 +28,7 @@ public class SmellsTreeContentProvider implements ITreeContentProvider {
 			}
 			return nodes;
 		} catch (CoreException e) {
-			new RefreshLogger().logError(e);
+			RefreshLogger.getInstance().logError(e);
 			return new Object[0];
 		}
 	}
