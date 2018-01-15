@@ -1,5 +1,6 @@
 package br.pucrio.opus.refresh.views.content.trees;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.IMethod;
@@ -20,9 +21,17 @@ public class TypeTreeNode extends AbstractTreeNode {
 		this.type = type;
 	}
 	
-	private IMethod[] getMethods() {
+	private List<IMethod> getSmellyMethods() {
 		try {
-			return type.getMethods();
+			OrganicDetectionService service = OrganicDetectionService.getInstance();
+			List<IMethod> smelly = new ArrayList<>();
+			IMethod[] methods = type.getMethods();
+			for (IMethod method : methods) {
+				if (service.isSmelly(method)) {
+					smelly.add(method);
+				}
+			}
+			return smelly;
 		} catch (JavaModelException e) {
 			new RefreshLogger().logError(e);
 			return null;
@@ -34,16 +43,16 @@ public class TypeTreeNode extends AbstractTreeNode {
 		OrganicDetectionService service = OrganicDetectionService.getInstance();
 		List<Smell> smells = service.getResource(type).getSmells();
 		
-		IMethod[] methods = getMethods();
+		List<IMethod> methods = getSmellyMethods();
 		if (methods == null) {
 			return new Object[0];
 		}
-		Object[] nodes = new Object[methods.length + smells.size()];
+		Object[] nodes = new Object[methods.size() + smells.size()];
 		for (int i = 0; i < smells.size(); i++) {
 			nodes[i] = new SmellTreeNode(this, smells.get(i));
 		}
 		for (int i = smells.size(); i < nodes.length; i++) {
-			nodes[i] = new MethodTreeNode(this, methods[i - smells.size()]);
+			nodes[i] = new MethodTreeNode(this, methods.get(i - smells.size()));
 		}
 		return nodes;
 	}
@@ -52,8 +61,8 @@ public class TypeTreeNode extends AbstractTreeNode {
 	public boolean hasChildren() {
 		OrganicDetectionService service = OrganicDetectionService.getInstance();
 		List<Smell> smells = service.getResource(type).getSmells();
-		IMethod[] methods = getMethods();
-		return (methods != null && methods.length > 0) || !smells.isEmpty();
+		List<IMethod> methods = getSmellyMethods();
+		return (methods != null && !methods.isEmpty()) || !smells.isEmpty();
 	}
 
 	@Override

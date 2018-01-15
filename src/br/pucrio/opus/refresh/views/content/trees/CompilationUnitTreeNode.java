@@ -1,10 +1,14 @@
 package br.pucrio.opus.refresh.views.content.trees;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.graphics.Image;
 
+import br.pucrio.opus.organic.OrganicDetectionService;
 import br.pucrio.opus.refresh.services.RefreshLogger;
 import br.pucrio.opus.refresh.views.PlatformIconProvider;
 
@@ -16,9 +20,17 @@ public class CompilationUnitTreeNode extends AbstractTreeNode {
 		this.compilationUnit = compilationUnit;
 	}
 	
-	private IType[] getTypes() {
+	private List<IType> getSmellyTypes() {
 		try {
-			return compilationUnit.getAllTypes();
+			OrganicDetectionService service = OrganicDetectionService.getInstance();
+			IType[] types = compilationUnit.getAllTypes();
+			List<IType> smelly = new ArrayList<>();
+			for (IType type : types) {
+				if (service.isSmelly(type)) {
+					smelly.add(type);
+				}
+			}
+			return smelly;
 		} catch (JavaModelException e) {
 			new RefreshLogger().logError(e);
 			return null;
@@ -27,21 +39,21 @@ public class CompilationUnitTreeNode extends AbstractTreeNode {
 
 	@Override
 	public Object[] getChildren() {
-		IType[] types = getTypes();
+		List<IType> types = getSmellyTypes();
 		if (types == null) {
 			return new Object[0];
 		}
-		Object[] nodes = new Object[types.length];
+		Object[] nodes = new Object[types.size()];
 		for (int i = 0; i < nodes.length; i++) {
-			nodes[i] = new TypeTreeNode(this, types[i]);
+			nodes[i] = new TypeTreeNode(this, types.get(i));
 		}
 		return nodes;
 	}
 
 	@Override
 	public boolean hasChildren() {
-		IType[] types = getTypes();
-		return types != null && types.length > 0;
+		List<IType> types = getSmellyTypes();
+		return types != null && !types.isEmpty();
 	}
 
 	@Override

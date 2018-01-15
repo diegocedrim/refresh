@@ -36,7 +36,6 @@ public class SmellsTreeView extends ViewPart implements IJobChangeListener {
 	@Override
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-
 		viewer.setContentProvider(new SmellsTreeContentProvider(this));
 		viewer.setInput(getViewSite());
 		viewer.setLabelProvider(new RefreshLabelProvider());
@@ -94,7 +93,6 @@ public class SmellsTreeView extends ViewPart implements IJobChangeListener {
 		if (event.getJob().belongsTo(SmellDetectorJob.SMELLS_FAMILY)) {
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
-					System.out.println("ATUALIZANDO!!!");
 					viewer.refresh();
 				}
 			});

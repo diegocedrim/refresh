@@ -1,10 +1,14 @@
 package br.pucrio.opus.refresh.views.content.trees;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.graphics.Image;
 
+import br.pucrio.opus.organic.OrganicDetectionService;
 import br.pucrio.opus.refresh.services.RefreshLogger;
 import br.pucrio.opus.refresh.views.PlatformIconProvider;
 
@@ -16,10 +20,17 @@ public class PackageFragmentTreeNode extends AbstractTreeNode {
 		this.packageFragment = packageFragment;
 	}
 	
-	private ICompilationUnit[] getCompilationUnits() {
+	private List<ICompilationUnit> getSmellyCompilationUnits() {
 		try {
+			OrganicDetectionService service = OrganicDetectionService.getInstance();
 			ICompilationUnit[] units = packageFragment.getCompilationUnits();
-			return units;
+			List<ICompilationUnit> smellyUnits = new ArrayList<>();
+			for (ICompilationUnit unit : units) {
+				if (service.isSmelly(unit)) {
+					smellyUnits.add(unit);
+				}
+			}
+			return smellyUnits;
 		} catch (JavaModelException e) {
 			new RefreshLogger().logError(e);
 			return null;
@@ -38,21 +49,21 @@ public class PackageFragmentTreeNode extends AbstractTreeNode {
 
 	@Override
 	public Object[] getChildren() {
-		ICompilationUnit[] units = getCompilationUnits();
-		if (units == null) {
+		List<ICompilationUnit> units = getSmellyCompilationUnits();
+		if (units == null || units.isEmpty()) {
 			return new Object[0];
 		}
-		CompilationUnitTreeNode[] nodes = new CompilationUnitTreeNode[units.length];
-		for (int i = 0; i < units.length; i++) {
-			nodes[i] = new CompilationUnitTreeNode(this, units[i]);
+		CompilationUnitTreeNode[] nodes = new CompilationUnitTreeNode[units.size()];
+		for (int i = 0; i < units.size(); i++) {
+			nodes[i] = new CompilationUnitTreeNode(this, units.get(i));
 		}
 		return nodes;
 	}
 
 	@Override
 	public boolean hasChildren() {
-		ICompilationUnit[] units = getCompilationUnits();
-		return units != null && units.length > 0;
+		List<ICompilationUnit> units = getSmellyCompilationUnits();
+		return units != null && !units.isEmpty();
 	}
 
 }

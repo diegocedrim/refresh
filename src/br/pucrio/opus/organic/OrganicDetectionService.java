@@ -3,11 +3,16 @@ package br.pucrio.opus.organic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -26,12 +31,15 @@ import br.pucrio.opus.organic.resources.Type;
 public class OrganicDetectionService {
 	private static final OrganicDetectionService singleton;
 	private Map<IJavaElement, Resource> resources;
+	private Set<IJavaElement> smellyElements;
 	
 	static {
 		singleton = new OrganicDetectionService();
 	}
 	
 	private OrganicDetectionService() {
+		this.resources = new HashMap<>();
+		this.smellyElements = new HashSet<>();
 	}
 	
 	public static OrganicDetectionService getInstance() {
@@ -40,6 +48,28 @@ public class OrganicDetectionService {
 	
 	public Resource getResource(IJavaElement javaElement) {
 		return this.resources.get(javaElement);
+	}
+	
+	public boolean isSmelly(IJavaElement element) {
+		return this.smellyElements.contains(element);
+	}
+	
+	private void addSmellyType(IType type) {
+		smellyElements.add(type);
+		smellyElements.add(type.getCompilationUnit());
+		IPackageFragment fragment = type.getPackageFragment();
+		if (fragment != null) {
+			smellyElements.add(fragment);
+		}
+		IJavaElement root = fragment.getAncestor(IJavaElement.PACKAGE_FRAGMENT_ROOT);
+		if (root != null) {
+			smellyElements.add(root);
+		}
+	}
+	
+	private void addSmellyMethod(IMethod method) {
+		smellyElements.add(method);
+		this.addSmellyType(method.getDeclaringType());
 	}
 	
 	private List<Type> getAllTypes(List<ICompilationUnit> units) {
@@ -70,8 +100,7 @@ public class OrganicDetectionService {
 				List<Smell> smells = methodSmellDetector.detect(method);
 				method.addAllSmells(smells);
 				if (!smells.isEmpty()) {
-					//TODO delete
-					System.out.println(method.getFullyQualifiedName() + " " + smells.toString());
+					this.addSmellyMethod((IMethod)method.getBinding().getJavaElement());
 				}
 			}
 			// some class-level detectors use method-level smells in their algorithms
@@ -79,8 +108,7 @@ public class OrganicDetectionService {
 			List<Smell> smells = classSmellDetector.detect(type);
 			type.addAllSmells(smells);
 			if (!smells.isEmpty()) {
-				//TODO delete
-				System.out.println(type.getFullyQualifiedName() + " " + smells.toString());
+				this.addSmellyType((IType)type.getBinding().getJavaElement());
 			}
 		}
 	}
@@ -102,6 +130,7 @@ public class OrganicDetectionService {
 	
 	public void detect(List<ICompilationUnit> units) throws IOException {
 		this.resources = new HashMap<>();
+		this.smellyElements = new HashSet<>();
 		AggregateMetricValues.getInstance().reset();
 		List<Type> allTypes = getAllTypes(units);
 		this.collectTypeMetrics(allTypes);
