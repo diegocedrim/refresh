@@ -1,5 +1,7 @@
 package br.pucrio.opus.refresh.views.content.trees;
 
+import org.eclipse.jdt.core.IJavaElement;
+
 import br.pucrio.opus.refresh.views.content.LabelAware;
 
 public interface TreeNode extends LabelAware {
@@ -8,5 +10,7 @@ public interface TreeNode extends LabelAware {
 	Object getParent();
 
 	boolean hasChildren();
+	
+	IJavaElement getJavaElement();
 	
 }

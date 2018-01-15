@@ -5,8 +5,9 @@ import javax.inject.Inject;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -15,9 +16,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import br.pucrio.opus.refresh.builder.SmellDetectorJob;
+import br.pucrio.opus.refresh.services.RefreshLogger;
+import br.pucrio.opus.refresh.views.content.trees.AbstractTreeNode;
 import br.pucrio.opus.refresh.views.content.trees.SmellsTreeContentProvider;
 
 
@@ -53,16 +57,19 @@ public class SmellsTreeView extends ViewPart implements IJobChangeListener {
 			public void run() {
 				IStructuredSelection selection = viewer.getStructuredSelection();
 				Object obj = selection.getFirstElement();
-				showMessage("Double-click detected on "+obj.toString());
+				
+				if (obj instanceof AbstractTreeNode) {
+					AbstractTreeNode node = (AbstractTreeNode)obj;
+					try {
+						JavaUI.openInEditor(node.getJavaElement());
+					} catch (PartInitException e) {
+						new RefreshLogger().logError(e);
+					} catch (JavaModelException e) {
+						new RefreshLogger().logError(e);
+					}
+				}
 			}
 		};
-	}
-
-	private void showMessage(String message) {
-		MessageDialog.openInformation(
-				viewer.getControl().getShell(),
-				"Sample View",
-				message);
 	}
 
 	private void hookDoubleClickAction() {

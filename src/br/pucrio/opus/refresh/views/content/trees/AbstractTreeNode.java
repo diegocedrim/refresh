@@ -1,5 +1,7 @@
 package br.pucrio.opus.refresh.views.content.trees;
 
+import org.eclipse.jdt.core.IJavaElement;
+
 public abstract class AbstractTreeNode implements TreeNode {
 	private TreeNode parent;
 	
@@ -11,4 +13,10 @@ public abstract class AbstractTreeNode implements TreeNode {
 	public Object getParent() {
 		return parent;
 	}
+	
+	@Override
+	public IJavaElement getJavaElement() {
+		return null;
+	}
+	
 }

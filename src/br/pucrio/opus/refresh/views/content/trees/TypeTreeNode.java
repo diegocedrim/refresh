@@ -3,6 +3,7 @@ package br.pucrio.opus.refresh.views.content.trees;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -49,7 +50,7 @@ public class TypeTreeNode extends AbstractTreeNode {
 		}
 		Object[] nodes = new Object[methods.size() + smells.size()];
 		for (int i = 0; i < smells.size(); i++) {
-			nodes[i] = new SmellTreeNode(this, smells.get(i));
+			nodes[i] = new SmellTreeNode(this, smells.get(i), type);
 		}
 		for (int i = smells.size(); i < nodes.length; i++) {
 			nodes[i] = new MethodTreeNode(this, methods.get(i - smells.size()));
@@ -84,6 +85,11 @@ public class TypeTreeNode extends AbstractTreeNode {
 			new RefreshLogger().logError(e);
 		}
 		return null;
+	}
+
+	@Override
+	public IJavaElement getJavaElement() {
+		return type;
 	}
 
 }

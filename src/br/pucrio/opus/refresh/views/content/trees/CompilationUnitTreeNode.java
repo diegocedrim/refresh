@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.swt.graphics.Image;
@@ -14,6 +15,7 @@ import br.pucrio.opus.refresh.views.PlatformIconProvider;
 
 public class CompilationUnitTreeNode extends AbstractTreeNode {
 	private ICompilationUnit compilationUnit;
+	
 	
 	public CompilationUnitTreeNode(TreeNode parent, ICompilationUnit compilationUnit) {
 		super(parent);
@@ -66,5 +68,8 @@ public class CompilationUnitTreeNode extends AbstractTreeNode {
 		return PlatformIconProvider.compilationUnit();
 	}
 
-	
+	@Override
+	public IJavaElement getJavaElement() {
+		return compilationUnit;
+	}
 }

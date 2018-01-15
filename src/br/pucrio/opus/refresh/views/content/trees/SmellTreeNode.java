@@ -1,5 +1,6 @@
 package br.pucrio.opus.refresh.views.content.trees;
 
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.swt.graphics.Image;
 
 import br.pucrio.opus.organic.collector.Smell;
@@ -7,10 +8,13 @@ import br.pucrio.opus.organic.collector.Smell;
 public class SmellTreeNode extends AbstractTreeNode {
 	
 	private Smell smell;
+	
+	private IJavaElement affected;
 
-	public SmellTreeNode(TreeNode parent, Smell smell) {
+	public SmellTreeNode(TreeNode parent, Smell smell, IJavaElement affected) {
 		super(parent);
 		this.smell = smell;
+		this.affected = affected;
 	}
 
 	@Override
@@ -37,5 +41,8 @@ public class SmellTreeNode extends AbstractTreeNode {
 		return null;
 	}
 
-
+	@Override
+	public IJavaElement getJavaElement() {
+		return affected;
+	}
 }
