@@ -18,16 +18,21 @@ public class ComplexClass  extends SmellDetector {
 	@Override
 	public List<Smell> detect(Resource resource) {
 		Type type = (Type)resource;
+		Double maxCC = -1d;
 		for (Method method : type.getMethods()) {
 			Double cc = method.getMetricValue(MetricName.CC);
-			if (cc != null && cc > 10) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("CC = " + cc);
-				
-				Smell smell = super.createSmell(resource);
-				smell.setReason(builder.toString());
-				return Arrays.asList(smell);
+			if (cc != null && cc > maxCC) {
+				maxCC = cc;
 			}
+		}
+		if (maxCC > 10) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("CC = " + maxCC);
+			
+			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.CC, maxCC);
+			smell.setReason(builder.toString());
+			return Arrays.asList(smell);
 		}
 		
 		return new ArrayList<>();

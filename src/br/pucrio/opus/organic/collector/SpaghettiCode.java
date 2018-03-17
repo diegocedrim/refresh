@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import br.pucrio.opus.organic.ast.visitors.FieldDeclarationCollector;
 import br.pucrio.opus.organic.ast.visitors.LocalFieldAccessCollector;
 import br.pucrio.opus.organic.ast.visitors.LocalMethodCallVisitor;
+import br.pucrio.opus.organic.metrics.MetricName;
 import br.pucrio.opus.organic.resources.Method;
 import br.pucrio.opus.organic.resources.Resource;
 import br.pucrio.opus.organic.resources.Type;
@@ -65,14 +66,14 @@ public class SpaghettiCode extends SmellDetector {
 	 * @param methods list of methods
 	 * @return true if at least two methods are connected or false, otherwise
 	 */
-	private boolean areConnected(Type type, List<Method> methods) {
+	private Integer countLongMethodConnections(Type type, List<Method> methods) {
 		Set<Object> elements = new HashSet<>();
 		TypeDeclaration typeDeclaration = type.getNodeAsTypeDeclaration();
 		
 		FieldDeclarationCollector fieldCollector = new FieldDeclarationCollector();
 		type.getNode().accept(fieldCollector);
 		List<FieldDeclaration> fields = fieldCollector.getNodesCollected();
-		
+		int connections = 0;
 		for (int i = 0; i < methods.size(); i++) {
 			Set<Object> localElements = new HashSet<>();
 			Method method = methods.get(i);
@@ -93,15 +94,15 @@ public class SpaghettiCode extends SmellDetector {
 			 * previous methods, then there is a connection between (at least) two 
 			 */
 			if (this.atLeastOneIn(localElements, elements)) {
-				return true;
+				connections++;
 			} else if (this.callsOtherLongMethod(localMethodCalls, methods, method)) {
-				return true;
+				connections++;
 			}
 			elements.addAll(localElements);
 		}
 		
 		
-		return false;
+		return connections;
 	}
 
 	@Override
@@ -113,11 +114,13 @@ public class SpaghettiCode extends SmellDetector {
 			return new ArrayList<>();
 		}
 		
-		if (this.areConnected(type, longMethods)) {
+		Integer longMethodConnections = this.countLongMethodConnections(type, longMethods);
+		if (longMethodConnections >= 1) {
 			StringBuilder builder = new StringBuilder();
-			builder.append("LONG_METHODS_CONNECTED = " + longMethods.size());
+			builder.append("LONG_METHODS_CONNECTED = " + longMethodConnections);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.LongMethodConnections, longMethodConnections.doubleValue());
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

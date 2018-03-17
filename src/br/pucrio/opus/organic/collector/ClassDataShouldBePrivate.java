@@ -21,6 +21,7 @@ public class ClassDataShouldBePrivate extends SmellDetector {
 			builder.append("PUBLIC_FIELD_COUNT = " + publicFieldCount);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.PublicFieldCount, publicFieldCount);
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

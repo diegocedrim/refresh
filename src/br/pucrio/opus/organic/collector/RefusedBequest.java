@@ -21,6 +21,7 @@ public class RefusedBequest extends SmellDetector {
 			builder.append("OVERRIDE_RATIO = " + overrideRatio);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.OverrideRatio, overrideRatio);
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

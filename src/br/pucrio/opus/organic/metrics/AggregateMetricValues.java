@@ -20,6 +20,8 @@ public class AggregateMetricValues implements Observer {
 	private Map<MetricName, Double> firstQuartileCache;
 	
 	private Map<MetricName, Double> stdDevCache;
+	
+	private Map<MetricName, Double> maxValueCache;
 
 	static {
 		singleton = new AggregateMetricValues();
@@ -34,6 +36,7 @@ public class AggregateMetricValues implements Observer {
 		this.avgCache = new HashMap<>();
 		this.firstQuartileCache = new HashMap<>();
 		this.stdDevCache = new HashMap<>();
+		this.maxValueCache = new HashMap<>();
 	}
 
 	private void register(MetricName metricName, Double value) {
@@ -48,6 +51,12 @@ public class AggregateMetricValues implements Observer {
 		this.avgCache.remove(metricName);
 		this.firstQuartileCache.remove(metricName);
 		this.stdDevCache.remove(metricName);
+		
+		Double maxValue = this.maxValueCache.get(metricName);
+		if (maxValue == null || value > maxValue) {
+			this.maxValueCache.put(metricName, value);
+		}
+		
 		stats.addValue(value);
 	}
 
@@ -103,6 +112,10 @@ public class AggregateMetricValues implements Observer {
 		Double standardDeviation = stats.getStandardDeviation();
 		this.stdDevCache.put(name, standardDeviation);
 		return standardDeviation;
+	}
+	
+	public Double getMaxValue(MetricName name) {
+		return this.maxValueCache.get(name);
 	}
 
 	public static AggregateMetricValues getInstance() {

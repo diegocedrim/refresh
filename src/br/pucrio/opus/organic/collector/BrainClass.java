@@ -54,6 +54,11 @@ public class BrainClass extends SmellDetector {
 			builder.append(", TCC = " + tcc);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.BMC, brainMethodCount.doubleValue());
+			smell.addMetricValue(MetricName.WMC, wmc);
+			smell.addMetricValue(MetricName.CLOC, loc);
+			smell.addInverseMetricValue(MetricName.TCC, tcc, 0d, 1d);
+			
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

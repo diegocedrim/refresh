@@ -16,11 +16,12 @@ public class MessageChain extends SmellDetector {
 	@Override
 	public List<Smell> detect(Resource resource) {
 		Double maxCallChain = resource.getMetricValue(MetricName.MaxCallChain);
-		if (maxCallChain > 3) {
+		if (maxCallChain > 5) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("MAX_CALL_CHAIN = " + maxCallChain);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.MaxCallChain, maxCallChain);
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

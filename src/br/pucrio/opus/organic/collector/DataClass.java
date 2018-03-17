@@ -40,6 +40,11 @@ public class DataClass extends SmellDetector {
 			builder.append(", WMC = " + wmc);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.WMC, wmc);
+			smell.addMetricValue(MetricName.NOAM, noam);
+			smell.addMetricValue(MetricName.PublicFieldCount, nopa);
+			smell.addMetricValue(MetricName.WOC, woc);
+			
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

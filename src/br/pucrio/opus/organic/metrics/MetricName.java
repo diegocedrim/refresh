@@ -21,7 +21,11 @@ public enum MetricName {
 	ChangingMethods("ChangingMethods"),
 	LCOM("LackOfCohesionOfMethods"),
 	LCOM2,
-	LCOM3;
+	LCOM3,
+	BMC("BrainMethodsCount"),
+	CallsSingleMethod,
+	ChildrenCount,
+	LongMethodConnections;
 	
 	private String label;
 	

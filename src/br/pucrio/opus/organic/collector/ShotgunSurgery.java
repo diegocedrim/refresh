@@ -31,6 +31,8 @@ public class ShotgunSurgery extends SmellDetector {
 			builder.append(", CC > " + Thresholds.MANY);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.ChangingMethods, cm);
+			smell.addMetricValue(MetricName.CC, cc);
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

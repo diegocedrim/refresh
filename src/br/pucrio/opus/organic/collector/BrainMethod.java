@@ -32,6 +32,10 @@ public class BrainMethod extends SmellDetector {
 			builder.append(", NOAV > " + Thresholds.MANY);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.MLOC, mloc);
+			smell.addMetricValue(MetricName.CC, cc);
+			smell.addMetricValue(MetricName.MaxNesting, maxNesting);
+			smell.addMetricValue(MetricName.NOAV, noav);
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

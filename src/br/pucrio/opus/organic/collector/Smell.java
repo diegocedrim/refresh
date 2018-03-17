@@ -1,10 +1,20 @@
 package br.pucrio.opus.organic.collector;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import br.pucrio.opus.organic.metrics.MetricName;
+
 public class Smell {
 
 	private SmellName name;
 	
 	private String reason;
+	
+	/**
+	 * Metrics used to detect the smell and their respective values
+	 */
+	private Map<MetricName, Double> metricValues;
 	
 	/**
 	 * Line of code where the smell starts to appear
@@ -13,19 +23,50 @@ public class Smell {
 	
 	private Integer endingLine;
 	
+	private Double severity;
+	
 	public Smell(SmellName name) {
+		this.metricValues = new HashMap<>();
 		this.name = name;
 	}
 	
 	public Smell(SmellName name, String reason) {
+		this.metricValues = new HashMap<>();
 		this.name = name;
 		this.reason = reason;
 	}
 	
 	public Smell(SmellName name, String reason, Integer line) {
+		this.metricValues = new HashMap<>();
 		this.name = name;
 		this.reason = reason;
 		this.startingLine = line;
+	}
+	
+	public void addMetricValue(MetricName name, Double value) {
+		this.metricValues.put(name, value);
+	}
+	
+	/**
+	 * Adds the inverse value of the metric (1/value). This happens when
+	 * a metric is good when the value is higher. We want to have in the map
+	 * only values that increases when the smell is worse.
+	 * @param name name of the metric
+	 * @param value value of the metric
+	 */
+	public void addInverseMetricValue(MetricName name, Double value, Double min, Double max) {
+		if (value <= min) {
+			this.metricValues.put(name, max);
+		} else if (value >= max) {
+			this.metricValues.put(name, min);
+		} else {
+			this.metricValues.put(name, max/value);
+		}
+		
+	}
+	
+	public Double getMetricValue(MetricName name) {
+		return this.metricValues.get(name);
 	}
 
 	public SmellName getName() {
@@ -59,5 +100,17 @@ public class Smell {
 	public void setEndingLine(Integer endingLine) {
 		this.endingLine = endingLine;
 	}
-	
+
+	public Double getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(Double severity) {
+		this.severity = severity;
+	}
+
+	@Override
+	public String toString() {
+		return "Smell [name=" + name + ", metricValues=" + metricValues + "]";
+	}
 }

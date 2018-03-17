@@ -32,6 +32,10 @@ public class IntensiveCoupling extends SmellDetector {
 				builder.append(", CC > " + Thresholds.SHALLOW);
 				
 				Smell smell = super.createSmell(resource);
+				smell.addMetricValue(MetricName.CINT, cint);
+				smell.addMetricValue(MetricName.CDISP, cdisp);
+				smell.addMetricValue(MetricName.CC, maxNesting);
+				
 				smell.setReason(builder.toString());
 				return Arrays.asList(smell);
 			}

@@ -24,6 +24,7 @@ public class LazyClass extends SmellDetector {
 			builder.append("CLOC < " + clocFirstQuartile);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addInverseMetricValue(MetricName.CLOC, classLOC, 0d, aggregate.getMaxValue(MetricName.CLOC));
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}

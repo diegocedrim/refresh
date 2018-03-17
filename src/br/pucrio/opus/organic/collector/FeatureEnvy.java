@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
 import br.pucrio.opus.organic.ast.visitors.ClassMethodInvocationVisitor;
+import br.pucrio.opus.organic.metrics.MetricName;
 import br.pucrio.opus.organic.resources.Method;
 import br.pucrio.opus.organic.resources.Resource;
 
@@ -46,6 +47,7 @@ public class FeatureEnvy extends SmellDetector {
 				builder.append(" > " + calls);
 				
 				Smell smell = super.createSmell(resource);
+				smell.addMetricValue(MetricName.CallsSingleMethod, calls.doubleValue());
 				smell.setReason(builder.toString());
 				return Arrays.asList(smell);
 			}

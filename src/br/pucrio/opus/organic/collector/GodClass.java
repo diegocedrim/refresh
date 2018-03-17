@@ -26,6 +26,9 @@ public class GodClass extends SmellDetector {
 			builder.append(", TCC < " + tccAvg);
 			
 			Smell smell = super.createSmell(resource);
+			smell.addMetricValue(MetricName.CLOC, classLOC);
+			smell.addInverseMetricValue(MetricName.TCC, classTCC, 0d, 1d);
+			
 			smell.setReason(builder.toString());
 			return Arrays.asList(smell);
 		}
