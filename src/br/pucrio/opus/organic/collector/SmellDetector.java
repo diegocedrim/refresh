@@ -21,11 +21,13 @@ public abstract class SmellDetector {
 		Smell smell = new Smell(getSmellName(), reason);
 		smell.setStartingLine(resource.getStartLineNumber());
 		smell.setEndingLine(resource.getEndLineNumber());
+		smell.setResource(resource);
 		return smell;
 	}
 	
 	protected Smell createSmell(Resource resource) {
 		Smell smell = new Smell(getSmellName());
+		smell.setResource(resource);
 		smell.setStartingLine(resource.getStartLineNumber());
 		smell.setEndingLine(resource.getEndLineNumber());
 		return smell;

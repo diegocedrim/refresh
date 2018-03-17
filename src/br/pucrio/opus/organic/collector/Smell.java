@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import br.pucrio.opus.organic.metrics.MetricName;
+import br.pucrio.opus.organic.resources.Resource;
 
 public class Smell {
 
@@ -23,7 +24,7 @@ public class Smell {
 	
 	private Integer endingLine;
 	
-	private Double severity;
+	private Resource resource;
 	
 	public Smell(SmellName name) {
 		this.metricValues = new HashMap<>();
@@ -101,16 +102,16 @@ public class Smell {
 		this.endingLine = endingLine;
 	}
 
-	public Double getSeverity() {
-		return severity;
+	public Resource getResource() {
+		return resource;
 	}
 
-	public void setSeverity(Double severity) {
-		this.severity = severity;
+	public void setResource(Resource resource) {
+		this.resource = resource;
 	}
 
 	@Override
 	public String toString() {
-		return "Smell [name=" + name + ", metricValues=" + metricValues + "]";
+		return "Smell [name=" + name + ", metricValues=" + metricValues + ", resource=" + resource + "]";
 	}
 }

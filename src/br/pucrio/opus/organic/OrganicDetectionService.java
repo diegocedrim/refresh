@@ -2,6 +2,7 @@ package br.pucrio.opus.organic;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +28,7 @@ import br.pucrio.opus.organic.resources.Method;
 import br.pucrio.opus.organic.resources.Resource;
 import br.pucrio.opus.organic.resources.SourceFile;
 import br.pucrio.opus.organic.resources.Type;
+import br.pucrio.opus.organic.smells.ranking.SmellComparatorReverse;
 
 public class OrganicDetectionService {
 	private static final OrganicDetectionService singleton;
@@ -92,7 +94,8 @@ public class OrganicDetectionService {
 		return allTypes;
 	}
 	
-	private void detectSmells(List<Type> allTypes) {
+	private List<Smell> detectSmells(List<Type> allTypes) {
+		List<Smell> allSmells = new ArrayList<>();
 		for (Type type : allTypes) {
 			// It is important for some detectors that method-level smells are collected first
 			for (Method method: type.getMethods()) {
@@ -100,6 +103,7 @@ public class OrganicDetectionService {
 				List<Smell> smells = methodSmellDetector.detect(method);
 				method.addAllSmells(smells);
 				if (!smells.isEmpty()) {
+					allSmells.addAll(smells);
 					this.addSmellyMethod((IMethod)method.getBinding().getJavaElement());
 				}
 			}
@@ -108,9 +112,11 @@ public class OrganicDetectionService {
 			List<Smell> smells = classSmellDetector.detect(type);
 			type.addAllSmells(smells);
 			if (!smells.isEmpty()) {
+				allSmells.addAll(smells);
 				this.addSmellyType((IType)type.getBinding().getJavaElement());
 			}
 		}
+		return allSmells;
 	}
 	
 	private void collectMethodMetrics(Type type) {
@@ -134,6 +140,10 @@ public class OrganicDetectionService {
 		AggregateMetricValues.getInstance().reset();
 		List<Type> allTypes = getAllTypes(units);
 		this.collectTypeMetrics(allTypes);
-		this.detectSmells(allTypes);
+		List<Smell> allSmells = this.detectSmells(allTypes);
+		Collections.sort(allSmells, new SmellComparatorReverse());
+		for (Smell smell : allSmells) {
+			System.out.println(smell);
+		}
 	}
 }

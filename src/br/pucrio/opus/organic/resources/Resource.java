@@ -112,5 +112,10 @@ public abstract class Resource extends Observable {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Resource [fqn=" + fullyQualifiedName + "]";
+	}
 	
 }
