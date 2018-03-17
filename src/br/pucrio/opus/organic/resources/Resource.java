@@ -9,6 +9,7 @@ import java.util.Observable;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.IBinding;
 
 import br.pucrio.opus.organic.collector.Smell;
 import br.pucrio.opus.organic.collector.SmellName;
@@ -35,6 +36,9 @@ public abstract class Resource extends Observable {
 		this.smells = new ArrayList<>();
 		identifyKind();
 	}
+	
+	
+	public abstract IBinding getGenericBinding();
 	
 	protected abstract void identifyKind();
 	

@@ -21,8 +21,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import br.pucrio.opus.refresh.builder.SmellDetectorJob;
 import br.pucrio.opus.refresh.services.RefreshLogger;
-import br.pucrio.opus.refresh.views.content.trees.AbstractTreeNode;
-import br.pucrio.opus.refresh.views.content.trees.SmellsTreeContentProvider;
+import br.pucrio.opus.refresh.views.content.elementstree.AbstractTreeNode;
+import br.pucrio.opus.refresh.views.content.elementstree.SmellsTreeContentProvider;
 
 
 public class SmellsTreeView extends ViewPart implements IJobChangeListener {
@@ -44,8 +44,6 @@ public class SmellsTreeView extends ViewPart implements IJobChangeListener {
 		viewer.setInput(getViewSite());
 		viewer.setLabelProvider(new RefreshLabelProvider());
 
-		// Create the help context id for the viewer's control
-		workbench.getHelpSystem().setHelp(viewer.getControl(), "br.pucrio.opus.refresh.viewer");
 		getSite().setSelectionProvider(viewer);
 		makeActions();
 		hookDoubleClickAction();

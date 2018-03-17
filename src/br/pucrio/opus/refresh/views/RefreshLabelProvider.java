@@ -3,7 +3,7 @@ package br.pucrio.opus.refresh.views;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import br.pucrio.opus.refresh.views.content.trees.TreeNode;
+import br.pucrio.opus.refresh.views.content.elementstree.TreeNode;
 
 public class RefreshLabelProvider extends LabelProvider {
 	

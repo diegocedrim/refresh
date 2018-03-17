@@ -28,6 +28,11 @@ public class Type extends Resource {
 		return binding;
 	}
 	
+	@Override
+	public IBinding getGenericBinding() {
+		return getBinding();
+	}
+	
 	public ITypeBinding getSuperclassBinding() {
 		ITypeBinding binding = this.getNodeAsTypeDeclaration().resolveBinding();
 		if (binding != null) {

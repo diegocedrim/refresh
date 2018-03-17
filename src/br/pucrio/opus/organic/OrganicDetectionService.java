@@ -34,6 +34,7 @@ public class OrganicDetectionService {
 	private static final OrganicDetectionService singleton;
 	private Map<IJavaElement, Resource> resources;
 	private Set<IJavaElement> smellyElements;
+	private List<Smell> detectedSmells;
 	
 	static {
 		singleton = new OrganicDetectionService();
@@ -142,8 +143,10 @@ public class OrganicDetectionService {
 		this.collectTypeMetrics(allTypes);
 		List<Smell> allSmells = this.detectSmells(allTypes);
 		Collections.sort(allSmells, new SmellComparatorReverse());
-		for (Smell smell : allSmells) {
-			System.out.println(smell);
-		}
+		this.detectedSmells = allSmells;
+	}
+	
+	public List<Smell> getDetectedSmells() {
+		return detectedSmells;
 	}
 }

@@ -1,4 +1,4 @@
-package br.pucrio.opus.refresh.views.content.trees;
+package br.pucrio.opus.refresh.views.content.elementstree;
 
 import java.util.List;
 

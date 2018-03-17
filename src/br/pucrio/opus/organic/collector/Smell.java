@@ -1,9 +1,11 @@
 package br.pucrio.opus.organic.collector;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import br.pucrio.opus.organic.metrics.MetricName;
+import br.pucrio.opus.organic.metrics.MetricValue;
 import br.pucrio.opus.organic.resources.Resource;
 
 public class Smell {
@@ -15,7 +17,7 @@ public class Smell {
 	/**
 	 * Metrics used to detect the smell and their respective values
 	 */
-	private Map<MetricName, Double> metricValues;
+	private Map<MetricName, MetricValue> metricValues;
 	
 	/**
 	 * Line of code where the smell starts to appear
@@ -45,7 +47,7 @@ public class Smell {
 	}
 	
 	public void addMetricValue(MetricName name, Double value) {
-		this.metricValues.put(name, value);
+		this.metricValues.put(name, new MetricValue(name, value, this));
 	}
 	
 	/**
@@ -57,17 +59,25 @@ public class Smell {
 	 */
 	public void addInverseMetricValue(MetricName name, Double value, Double min, Double max) {
 		if (value <= min) {
-			this.metricValues.put(name, max);
+			this.metricValues.put(name, new MetricValue(name, max, this));
 		} else if (value >= max) {
-			this.metricValues.put(name, min);
+			this.metricValues.put(name, new MetricValue(name, min, this));
 		} else {
-			this.metricValues.put(name, max/value);
+			this.metricValues.put(name, new MetricValue(name, max/value, this));
 		}
 		
 	}
 	
 	public Double getMetricValue(MetricName name) {
-		return this.metricValues.get(name);
+		MetricValue value = this.metricValues.get(name);
+		if (value != null) {
+			return value.getValue();
+		}
+		return null;
+	}
+	
+	public Collection<MetricValue> getAllMetricValues() {
+		return metricValues.values();
 	}
 
 	public SmellName getName() {

@@ -22,6 +22,11 @@ public class Method extends Resource {
 		return binding;
 	}
 	
+	@Override
+	public IBinding getGenericBinding() {
+		return getBinding();
+	}
+	
 	protected void identifyKind() {
 		MethodDeclaration declaration = (MethodDeclaration)this.getNode();
 		StringBuffer buffer = new StringBuffer();
@@ -106,5 +111,5 @@ public class Method extends Resource {
 	public String toString() {
 		return "Method [fqn=" + getFullyQualifiedName() + "]";
 	}
-	
+
 }
